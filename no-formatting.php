@@ -19,20 +19,20 @@ function bb_no_formatting() {
 		return;
 	
 	//get current post ID
+	//@todo: can we use $post here?
 	global $wp_query;
 	$post_id = $wp_query->post->ID;
 	
 	//Look for a "no_formatting" page meta
-	$no_formatting = get_post_meta($post_id, 'no_formatting', true);
-	
+	if ( !get_post_meta( $post_id, 'no_formatting', true ) )
+		return;
+			
 	//if the meta is set, call our template filter
-	if ($no_formatting) {
-		remove_filter( 'the_content', 'wpautop' );
-		add_filter('template', 'bb_no_formatting_cb', 100);
-		add_filter('single_template', 'bb_no_formatting_cb', 100);
-		add_filter('page_template', 'bb_no_formatting_cb', 100);
-		add_filter('post_template', 'bb_no_formatting_cb', 100);
-	}
+	remove_filter( 'the_content', 'wpautop' );
+	add_filter('template', 'bb_no_formatting_cb', 100);
+	add_filter('single_template', 'bb_no_formatting_cb', 100);
+	add_filter('page_template', 'bb_no_formatting_cb', 100);
+	add_filter('post_template', 'bb_no_formatting_cb', 100);
 	
 }
 
